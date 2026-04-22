@@ -237,7 +237,7 @@ const HomeProjects = () => {
             </div>
             
             {/* Project Info Footer */}
-            <div className="px-8 py-6 flex items-center gap-4 bg-white">
+            <div className="px-8 py-6 flex items-center justify-between bg-white">
               <span 
                 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#165dfc]"
                 style={{ fontFamily: '"Lucida Console", Monaco, monospace' }}
@@ -245,7 +245,7 @@ const HomeProjects = () => {
                 PROJECT {project.id}
               </span>
               <h3 
-                className="text-[12px] md:text-[12px] font-medium text-black tracking-tight"
+                className="text-[12px] md:text-[12px] font-medium text-black tracking-tight text-right"
                 style={{ fontFamily: '"Trebuchet MS", Helvetica, sans-serif' }}
               >
                 {project.title}
@@ -798,7 +798,7 @@ const HomePage = () => {
               MILDLY IMPRESSIVE MOMENTS
             </h4>
             <p 
-                className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-black/80 mb-12 max-w-5xl"
+                className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-black/80 mb-12 max-w-[850px]"
                 style={{ fontSize: '15px', textAlign: 'left' }}
               >
                 我曾在 4 家头部企业参加AI相关实习。搭过 Agent、调过 Prompt、跑过 1000+ 条 AI 视频；所在团队的产品冲上过 ProductHunt 日榜 TOP 2；用 Cursor / Claude Code 独立做过AI小程序与可复用 Skill；主导大学生项目为非遗米糕拿过一笔国家级立项基金；还有一支 AI 短片，意外冲进过联通彩铃APP月度订阅榜 TOP 10（真的）。剩下的时间，我在心理学、象棋、陶艺和滑雪里找心流——小小的瞬间，大大的开心。
@@ -1290,19 +1290,19 @@ const WorkPage = () => {
               <div className="border-t border-black/10 grid grid-cols-1 lg:grid-cols-12 overflow-hidden group lg:h-[550px]">
                 {/* Left Content - White Background */}
                 <div className="lg:col-span-4 flex flex-col justify-between p-8 md:p-12 bg-white">
-                  <div className="flex justify-between items-center w-full mb-12">
+                  <div className="flex justify-between items-end w-full mb-12">
                     <span 
-                       className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 text-black"
+                       className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 text-black mb-[2px]"
                        style={{ fontFamily: '"Lucida Console", Monaco, monospace', letterSpacing: '1px' }}
                      >
                        Project {project.id}
                      </span>
-                     <h2 
-                        className="text-[17px] font-serif font-medium leading-tight text-black text-right"
-                        style={{ fontFamily: 'Georgia, serif' }}
+                     <h3 
+                        className="text-[12px] font-medium tracking-tight text-black text-right"
+                        style={{ fontFamily: '"Trebuchet MS", Helvetica, sans-serif' }}
                       >
                        {project.title}
-                     </h2>
+                     </h3>
                   </div>
                 
                   <div className="mt-auto">
