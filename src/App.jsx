@@ -44,7 +44,7 @@ const projectsData = [
     title: 'AI Video', 
     client: 'Internal Project',
     role: 'Product Designer',
-    approach: 'Focusing on the intersection of motion and intelligence. The design system leverages dynamic layouts and fluid transitions to showcase the power of AI-driven video content creation.',
+    approach: '',
     desc: '✦ 这是我和 AI 一起玩出来的一小片影像世界。', 
     imageUrl: '/video-main.gif', 
     isPlaceholder: false,
@@ -60,8 +60,8 @@ const projectsData = [
       {
         title: '品牌创意广告',
         videos: [
-          { id: 'ad-1', title: 'AI CONCEPT 2', cover: '/video-2.gif', bvid: 'BV13qdmBfEbV' },
-          { id: 'ad-2', title: 'AI CONCEPT 7', cover: '/video-7.gif', bvid: 'BV1DqdmBZEZZ' }
+          { id: 'ad-1', title: '宝矿力水特广告片', cover: '/video-2.gif', bvid: 'BV13qdmBfEbV' },
+          { id: 'ad-2', title: '浪琴手表广告片-韦斯安德森风格', cover: '/video-7.gif', bvid: 'BV1DqdmBZEZZ' }
         ]
       },
       {
@@ -237,7 +237,7 @@ const HomeProjects = () => {
             </div>
             
             {/* Project Info Footer */}
-            <div className="px-8 py-6 flex items-center justify-between bg-white">
+            <div className="px-4 md:px-8 py-4 md:py-6 flex items-center justify-between bg-white">
               <span 
                 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#165dfc]"
                 style={{ fontFamily: '"Lucida Console", Monaco, monospace' }}
@@ -694,9 +694,9 @@ const HomePage = () => {
           <div className="h-[45vh] bg-[#e6f0ff]" />
         </div>
 
-        <div className="relative z-10 flex-1 px-8 md:px-24">
+        <div className="relative z-10 flex-1 px-6 md:px-24">
           {/* Name Section - Aligning bottom with the line */}
-          <div className="absolute left-8 md:left-24 top-[70vh] -translate-y-full pb-1">
+          <div className="absolute left-6 md:left-24 top-[70vh] -translate-y-full pb-1">
             <ScrollReveal>
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
@@ -704,19 +704,19 @@ const HomePage = () => {
                 transition={{ duration: 0.8 }}
                 className="flex flex-col items-start"
               >
-                <div className="mb-1 md:mb-2 ml-2 flex items-center gap-8">
+                <div className="mb-1 md:mb-2 ml-1 md:ml-2 flex items-center gap-4 md:gap-8">
                    <span 
-                     className="text-[65px] md:text-[65px] font-black leading-none tracking-tighter text-[#00a73d]"
+                     className="text-[45px] sm:text-[55px] md:text-[65px] font-black leading-none tracking-tighter text-[#00a73d]"
                      style={{ fontFamily: 'Tahoma, Geneva, sans-serif' }}
                    >
                      ZOE ZHOU
                    </span>
-                   <FlowerIcon className="w-24 h-24 md:w-36 md:h-36 mt-2" color="#facc15" />
+                   <FlowerIcon className="w-16 h-16 md:w-36 md:h-36 mt-1 md:mt-2" color="#facc15" />
                  </div>
 
-                 <div className="flex items-center gap-6 leading-[15px] -mt-2 md:-mt-4">
+                 <div className="flex items-center gap-4 md:gap-6 leading-[15px] -mt-2 md:-mt-4">
                    <h1 
-                     className="text-[150px] md:text-[150px] font-black leading-[0.75] tracking-tighter text-green-600"
+                     className="text-[80px] sm:text-[100px] md:text-[150px] font-black leading-[0.75] tracking-tighter text-green-600"
                      style={{ fontFamily: 'Arial, sans-serif' }}
                    >
                      周怡沁
@@ -727,7 +727,7 @@ const HomePage = () => {
           </div>
 
           {/* Slogan Section - Centered between Name and Scroll */}
-          <div className="absolute left-[55%] top-[70vh] -translate-x-1/2 -translate-y-full pb-4">
+          <div className="absolute left-6 md:left-[55%] top-[82vh] md:top-[70vh] md:-translate-x-1/2 -translate-y-full pb-4">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -735,22 +735,22 @@ const HomePage = () => {
               className="max-w-none text-left"
             >
               <p 
-                className="text-[14px] md:text-[16px] font-bold text-black leading-tight mb-1 whitespace-nowrap"
+                className="text-[12px] md:text-[16px] font-bold text-black leading-tight mb-1 whitespace-nowrap"
                 style={{ fontFamily: '"Lucida Console", Monaco, monospace' }}
               >
                 Taste × Shipping Speed = Who I'm Becoming.
               </p>
-              <div className="flex gap-4 text-gray-400 font-black text-[10px] tracking-[0.2em] uppercase h-4 items-center">
-                <span className="flex items-center gap-2">AI Agents</span>
-                <span className="flex items-center gap-2 border-l border-gray-100 pl-4">Vibe Coding</span>
+              <div className="flex gap-2 md:gap-4 text-gray-400 font-black text-[9px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] uppercase h-4 items-center">
+                <span className="flex items-center gap-1 md:gap-2">AI Agents</span>
+                <span className="flex items-center gap-1 md:gap-2 border-l border-gray-100 pl-2 md:pl-4">Vibe Coding</span>
               </div>
             </motion.div>
           </div>
 
           {/* Scroll Section - Right aligned */}
-          <div className="absolute right-8 md:right-24 top-[70vh] -translate-y-full pb-5">
+          <div className="absolute right-6 md:right-24 top-[90vh] md:top-[70vh] -translate-y-full pb-5">
             <div 
-              className="text-black font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-2 whitespace-nowrap"
+              className="text-black font-black text-[10px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.2em] flex items-center gap-2 whitespace-nowrap"
               style={{ fontFamily: '"Lucida Console", Monaco, monospace' }}
             >
               Scroll for more <ArrowRight className="rotate-90" size={14} />
@@ -777,7 +777,7 @@ const HomePage = () => {
               viewport={{ once: true }}
               className="relative z-10"
             >
-              <span className="text-white text-5xl md:text-[8vw] font-black tracking-tighter border-b-4 border-white/30 border-dotted group-hover:border-white transition-all duration-500">
+              <span className="text-white text-4xl md:text-[8vw] font-black tracking-tighter border-b-4 border-white/30 border-dotted group-hover:border-white transition-all duration-500">
                 View all projects
               </span>
             </motion.div>
@@ -798,7 +798,7 @@ const HomePage = () => {
               MILDLY IMPRESSIVE MOMENTS
             </h4>
             <p 
-                className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-black/80 mb-12 max-w-[850px]"
+                className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold leading-tight text-black/80 mb-8 md:mb-12 max-w-[850px]"
                 style={{ fontSize: '15px', textAlign: 'left' }}
               >
                 我曾在 4 家头部企业参加AI相关实习。搭过 Agent、调过 Prompt、跑过 1000+ 条 AI 视频；所在团队的产品冲上过 ProductHunt 日榜 TOP 2；用 Cursor / Claude Code 独立做过AI小程序与可复用 Skill；主导大学生项目为非遗米糕拿过一笔国家级立项基金；还有一支 AI 短片，意外冲进过联通彩铃APP月度订阅榜 TOP 10（真的）。剩下的时间，我在心理学、象棋、陶艺和滑雪里找心流——小小的瞬间，大大的开心。
@@ -975,7 +975,7 @@ const AboutPage = () => {
       <div className="min-h-screen bg-white selection:bg-[#0047ff] selection:text-white">
         {/* About Hero */}
         <div className="h-[60vh] flex flex-col justify-end px-4 md:px-12 pb-2 relative bg-white overflow-hidden">
-          <div className="absolute bottom-2 right-4 md:right-12 w-48 h-64 md:w-64 md:h-84 overflow-hidden z-10 bg-gray-100 flex items-center justify-center border border-black/5">
+          <div className="absolute bottom-2 right-4 md:right-12 w-40 h-56 md:w-64 md:h-84 overflow-hidden z-10 bg-gray-100 flex items-center justify-center border border-black/5">
              <SafeImage 
                src="/about-me.png" // 改为读取 public/about-me.png
                alt="Zoe Zhou" 
@@ -983,7 +983,7 @@ const AboutPage = () => {
              />
              <div className="absolute inset-0 bg-black/5 pointer-events-none" />
           </div>
-          <h1 className="text-[120px] font-black leading-none tracking-tighter text-[#0047ff] drop-shadow-sm mb-2 relative z-20">
+          <h1 className="text-[80px] md:text-[120px] font-black leading-none tracking-tighter text-[#0047ff] drop-shadow-sm mb-2 relative z-20">
              About
            </h1>
         </div>
@@ -1022,8 +1022,8 @@ const AboutPage = () => {
             {/* Experience Section - Now after Strengths */}
             <ScrollReveal>
               <div className="w-full">
-                <div className="flex flex-col md:flex-row md:items-baseline gap-4 mb-12">
-                  <h2 className="text-6xl md:text-8xl font-black text-[#0047ff] tracking-tighter">
+                <div className="flex flex-col md:flex-row md:items-baseline gap-4 mb-8 md:mb-12">
+                  <h2 className="text-5xl md:text-8xl font-black text-[#0047ff] tracking-tighter">
                     Experience
                   </h2>
                   <div className="flex items-center gap-2 bg-white/50 backdrop-blur px-4 py-1.5 rounded-full border border-black/5">
@@ -1045,12 +1045,12 @@ const AboutPage = () => {
                       {/* Header */}
                       <button 
                         onClick={() => setExpandedIndex(expandedIndex === i ? -1 : i)}
-                        className="w-full text-left px-8 py-10 flex justify-between items-start group"
+                        className="w-full text-left px-5 md:px-8 py-6 md:py-10 flex justify-between items-start group"
                       >
-                        <div className="flex flex-col gap-4">
-                          <div className="flex flex-wrap items-center gap-4">
-                            <h3 className="text-2xl font-black text-[#4a3728]">{exp.studio}</h3>
-                            <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider ${exp.tagColor}`}>
+                        <div className="flex flex-col gap-3 md:gap-4">
+                          <div className="flex flex-wrap items-center gap-2 md:gap-4">
+                            <h3 className="text-xl md:text-2xl font-black text-[#4a3728]">{exp.studio}</h3>
+                            <span className={`text-[10px] font-black px-2 md:px-3 py-1 rounded-full uppercase tracking-wider ${exp.tagColor}`}>
                               {exp.tag}
                             </span>
                           </div>
@@ -1076,7 +1076,7 @@ const AboutPage = () => {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                           >
-                            <div className="px-8 pb-12 pt-4 border-t border-black/5">
+                            <div className="px-5 md:px-8 pb-8 md:pb-12 pt-4 border-t border-black/5">
                               <div className="max-w-4xl space-y-12">
                                 {/* Skills Tags */}
                                 <div className="flex flex-wrap gap-2">
@@ -1200,7 +1200,7 @@ const AboutPage = () => {
             <ScrollReveal>
               <div className="w-full space-y-8">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-6xl md:text-8xl font-black text-[#0047ff] tracking-tighter">
+                  <h2 className="text-5xl md:text-8xl font-black text-[#0047ff] tracking-tighter">
                     Education
                   </h2>
                 </div>
@@ -1231,7 +1231,7 @@ const AboutPage = () => {
             {/* Awards & Honors Section */}
             <ScrollReveal>
               <div className="w-full space-y-12">
-                <h2 className="text-6xl md:text-8xl font-black text-[#0047ff] tracking-tighter">
+                <h2 className="text-5xl md:text-8xl font-black text-[#0047ff] tracking-tighter">
                   Awards & Honors
                 </h2>
                 
@@ -1277,7 +1277,7 @@ const WorkPage = () => {
         {/* Header Section - Positioned at bottom to match About page */}
         <div className="h-[60vh] flex flex-col justify-end px-4 md:px-12 pb-2 relative overflow-hidden">
           <div className="relative inline-block mb-2">
-              <h1 className="text-[130px] font-black leading-[125px] tracking-[-4px] text-[#ff3b30]">
+              <h1 className="text-[70px] md:text-[130px] font-black leading-[65px] md:leading-[125px] tracking-[-2px] md:tracking-[-4px] text-[#ff3b30]">
                 Portfolio
               </h1>
             </div>
@@ -1289,8 +1289,8 @@ const WorkPage = () => {
             <ScrollReveal key={project.id}>
               <div className="border-t border-black/10 grid grid-cols-1 lg:grid-cols-12 overflow-hidden group lg:h-[550px]">
                 {/* Left Content - White Background */}
-                <div className="lg:col-span-4 flex flex-col justify-between p-8 md:p-12 bg-white">
-                  <div className="flex justify-between items-end w-full mb-12">
+                <div className="lg:col-span-4 flex flex-col justify-between p-6 md:p-12 bg-white">
+                  <div className="flex justify-between items-end w-full mb-8 md:mb-12">
                     <span 
                        className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 text-black mb-[2px]"
                        style={{ fontFamily: '"Lucida Console", Monaco, monospace', letterSpacing: '1px' }}
@@ -1486,29 +1486,33 @@ const ProjectDetailPage = () => {
         </div>
 
         {/* Project Info Section - Added back the missing section */}
-        <ScrollReveal>
-          <div className="py-24 px-4 md:px-12 max-w-7xl mx-auto border-b border-black/5 flex flex-col md:flex-row justify-between items-start gap-12">
-            <div className="max-w-2xl space-y-12">
-              {/* Approach Section */}
-              <div className="space-y-6">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">ART DIRECTION & APPROACH</h4>
-                <p className="text-lg font-medium leading-relaxed text-black/60">
-                  {project.approach}
-                </p>
+        {(project.approach || project.qrCodeUrl) && (
+          <ScrollReveal>
+            <div className="py-24 px-4 md:px-12 max-w-7xl mx-auto border-b border-black/5 flex flex-col md:flex-row justify-between items-start gap-12">
+              <div className="max-w-2xl space-y-12">
+                {/* Approach Section */}
+                {project.approach && (
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">ART DIRECTION & APPROACH</h4>
+                    <p className="text-lg font-medium leading-relaxed text-black/60">
+                      {project.approach}
+                    </p>
+                  </div>
+                )}
               </div>
-            </div>
 
-            {/* QR Code Section */}
-            {project.qrCodeUrl && (
-              <div className="shrink-0 bg-white p-4 rounded-3xl border-2 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex flex-col items-center gap-4">
-                <div className="w-32 h-32 md:w-40 md:h-40 relative">
-                  <SafeImage src={project.qrCodeUrl} alt="Experience App" className="w-full h-full" />
+              {/* QR Code Section */}
+              {project.qrCodeUrl && (
+                <div className="shrink-0 bg-white p-4 rounded-3xl border-2 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex flex-col items-center gap-4">
+                  <div className="w-32 h-32 md:w-40 md:h-40 relative">
+                    <SafeImage src={project.qrCodeUrl} alt="Experience App" className="w-full h-full" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">EXPERIENCE APP</span>
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">EXPERIENCE APP</span>
-              </div>
-            )}
-          </div>
-        </ScrollReveal>
+              )}
+            </div>
+          </ScrollReveal>
+        )}
 
         {/* Video Grid Section */}
         <div className="py-24 px-4 md:px-12 max-w-7xl mx-auto">
@@ -1706,7 +1710,7 @@ const InspoLoop = () => {
 
   return (
     <section className="pt-12 pb-24 bg-[#e6f0ff] overflow-hidden border-y-[0px] border-solid border-black">
-      <div className="px-8 md:px-24 mb-12 flex justify-between items-end">
+      <div className="px-6 md:px-24 mb-8 md:mb-12 flex justify-between items-end">
         <h2 className="text-5xl md:text-7xl font-black text-[#1e40af] tracking-tighter">
           Inspo loop
         </h2>
