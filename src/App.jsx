@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { Mail, Github, Instagram, ArrowRight, ExternalLink, Sparkles, Code2, Cpu, Zap, GraduationCap, Award, Phone, Bot, ChevronLeft, ArrowLeft, PlayCircle, X, Play } from 'lucide-react';
 
 // 导入本地图片示例：
@@ -15,8 +15,8 @@ const projectsData = [
     client: '独立产品规划 / 全栈开发 / RAG 搭建',
     role: '2025.3',
     tags: ['Vibe Coding', '小程序', '心理学'],
-    showcaseType: 'mockups', // 标识使用小程序样机展示
-    mockups: [ // 为样机展示准备的多张图片
+    showcaseType: 'mockups', 
+    mockups: [ 
       '/aura-1.png',
       '/aura-2.png',
       '/aura-3.png',
@@ -29,18 +29,204 @@ const projectsData = [
        { label: '0→1', sub: '小程序闭环' },
        { label: 'MVP', sub: '极速落地' }
      ],
-    imageUrl: '/aura-main.gif', // 替换为你的主图动图
+    imageUrl: '/aura-main.gif', 
     videoUrl: '', 
     bgImageUrl: '/forest.gif', 
     detailColor: 'bg-green-600',
-    detailImages: [ // 替换为详情页展示的多张图片链接
+    detailImages: [ 
       'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200',
       'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80&w=1200'
     ],
-    qrCodeUrl: '/aura-qr.png' // 标识小程序二维码路径
+    qrCodeUrl: '/aura-qr.png' 
   },
   { 
     id: '02',
+    title: '广告投放素材运营', 
+    client: '多行业客户',
+    role: '素材运营 / 视频剪辑',
+    tags: ['广告投放', '素材运营', '数据分析', 'AIGC'],
+    approach: '针对不同行业客户的投放需求，制定差异化的素材策略。通过数据回收（消耗、点击率、转化率）不断优化创意方向，提升跑量素材的产出效率。',
+    desc: '运营广告投放内容素材，负责从素材策划、视频剪辑/AIGC生成到后期数据追踪的全链路素材运营工作 。', 
+    highlights: [
+      { label: '爆款产出', sub: '高消耗素材' },
+      { label: '数据驱动', sub: 'ROI 提升' }
+    ],
+    imageUrl: '/inspo-2.gif', 
+    detailColor: 'bg-indigo-600',
+    showcaseType: 'ad-portfolio',
+    campaigns: [
+      {
+        client: 'Lazada',
+        logo: '/logos/lazada.png', 
+        stats: [
+          { label: '月日均消耗', value: '待补充' },
+          { label: '总 ROI', value: '待补充' }
+        ],
+        materials: [
+          {
+            type: 'banner',
+            src: '/lazada-1.jpg',
+            region: 'PHL',
+            spending: '1632.02USD',
+            strategy: '针对学生群体，通过清新生活化的洗护场景结合 50% 折扣，提升开学季点击率。',
+            prompt: '【视觉风格】东南亚电商风格banner设计，转化导向，干净排版，高对比，高点击率，4k，画面左侧一张年轻美丽的东南亚女性美妆广告特写照片。她留着湿漉漉的深色头发，正拿着睫毛膏刷涂抹睫毛，眼神直视镜头。她的皮肤具有自然的亮泽肌理，脸上带有细腻的写实水珠。背景是干净的淡蓝色瓷砖墙。自然电影光效，商业彩妆广告风格，超写实，画面右侧超大白色粗体标题（บิวตี้ดีลดีวันพฤหัส）立体字效果，强视觉冲击，下方卡片式信息区，两个优惠券模块拼接（25% + 20%），简洁优惠券icon辅助，扁平渐变风格。',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/lazada-2.jpg',
+            region: 'PHL',
+            spending: '945.04USD',
+            strategy: '8.8 大促主题，采用强对比的红色视觉与霓虹灯带，营造紧迫的购物氛围。',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/lazada-3.jpg',
+            region: '待补充',
+            spending: '666.28USD',
+            strategy: '运动品类专场，利用动感十足的人物跑姿与城市天际线，传达品牌活力。',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/lazada-4.jpg',
+            region: 'PHL',
+            spending: '773.80USD',
+            strategy: '发薪日大促 (Payday Sale)，突出国际大牌折扣，使用金属质感 UI 提升品质感。',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/lazada-5.jpg',
+            region: 'PHL',
+            spending: '444.32USD',
+            strategy: '发薪日大促 (Payday Sale)，结合品牌吉祥物 IP 与礼盒元素，增加亲和力与互动感。',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          }
+        ]
+      },
+      {
+        client: 'Shopee',
+        logo: '/logos/shopee.png', 
+        stats: [
+          { label: '月日均消耗', value: '待补充' }
+        ],
+        materials: [
+          {
+            type: 'banner',
+            src: '/shopee-1.jpg',
+            region: 'PHL',
+            spending: '582.55USD',
+            strategy: '2026 Shopee 菲律宾发薪日大促 DSP 素材，采用极简高转化布局，突出 99% OFF 核心利益点，通过 3D 电商视觉提升官方质感。',
+            prompt: '【视觉风格】2026 Shopee Philippines PayDay Sale DSP信息流高CTR商业广告，参考Shopee官方活动KV，高级Premium 3D电商商业视觉。整体采用Shopee品牌橙（Shopee Orange）与Golden Orange高饱和渐变，搭配少量亮黄色及Shopee Blue形成鲜明视觉层次，整体年轻、热烈、有冲击力，营造强烈的Pay Day购物狂欢氛围。\\n\\n整体设计遵循2026东南亚Shopee DSP高CTR素材趋势，采用极简高转化布局，仅保留3–4个核心视觉元素，大面积留白，让用户在1秒内快速获取利益点。画面采用高级商业布光、柔和体积光、真实镜面高光、细腻阴影及高品质材质表现，整体更具官方活动KV质感。\\n\\n相比普通促销KV，画面加入适量动感元素，如流动光轨、环形发光底座、轻微速度线、漂浮光片及柔和粒子，让画面更有节奏感、更具活力，但整体保持高级、简洁，不显杂乱。\\n\\n字体采用现代超粗无衬线字体，并带有轻微3D厚度与高光描边，整体文字层级清晰，以折扣利益点作为第一视觉。\\n\\nPAYDAY SALE采用白色或浅暖黄色填充，搭配较深的橙红色描边，增加轻微立体阴影及柔和高光，使标题更加精致、有层次，但视觉权重明显低于折扣数字。标题尺寸适中，不作为画面中心，而是作为活动标签放置于折扣信息上方，与整体视觉保持协调。\\n\\n99%采用超大立体数字设计，白色填充搭配橙橘色渐变描边及柔和阴影，占据画面约30%的视觉面积，成为整个画面的第一视觉焦点。\\n\\nShopee Logo必须完全按照参考图片保持一致，不允许修改颜色、比例、字体或任何设计细节。\\n\\n【创意主体】上传的两张参考产品图片中的产品必须同时出现在画面中，两款产品的外观、颜色、比例、材质、品牌标识及所有设计细节必须与参考图片完全一致，不允许修改产品造型或AI自由发挥。\\n\\n两款产品采用高端商业摄影方式展示，可采用一前一后错落悬浮布局，或分别放置于不同高度的3D发光圆形展示台上，形成自然层次感。其中一款产品作为主视觉略大，另一款作为辅助视觉，两款产品都必须完整、清晰展示，不得裁切、遮挡或弱化其中任意一款产品。\\n\\n产品周围加入少量发光光环、流动光轨及轻微速度感元素，增强画面活力，但所有特效均不得遮挡产品主体。\\n\\n画面仅保留以下四个核心元素：Shopee Logo、两款参考产品、超大利益点、超大CTA按钮。不加入金币、优惠券、礼盒、购物袋、大量ICON、复杂装饰或其他商品，保持画面简洁聚焦。不要出现手机屏幕、Shopee App界面、网页UI或任何APP界面元素。\\n\\n【场景描述】背景采用Shopee品牌橙色至金橙色渐变，加入极浅透视网格、柔和光束、轻微体积光以及少量抽象几何光片，营造高级商业空间感。产品底部采用一至两个圆形展示台，增强画面层次，但整体保持简洁，避免背景元素抢夺视觉焦点。整体视觉重心集中于优惠信息、产品及CTA按钮，符合Shopee菲律宾信息流广告风格。\\n\\n【营销文案】PAY DAY SALE, UP TO 99% OFF, FREE SHIPPING. CTA按钮（超大）：SHOP NOW. 版式建议：将 99% 放大为画面最大视觉元素，\"UP TO\" 与 \"OFF\" 作为辅助文字围绕数字排版；FREE SHIPPING 采用Shopee蓝色圆角胶囊标签，放置于折扣信息下方；PAY DAY SALE 位于顶部作为活动主题；SHOP NOW 按钮宽大醒目，采用Shopee蓝底白字，提升点击引导效果。整体画面控制在4个核心信息点内，比参考图更简洁、更符合2026年Shopee菲律宾DSP信息流高CTR素材设计趋势。',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/shopee-2.jpg',
+            region: 'VNM',
+            spending: '494.93USD',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/shopee-3.jpg',
+            region: 'BRA',
+            spending: '588.50USD',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/shopee-4.jpg',
+            region: '待补充',
+            spending: '待补充',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'banner',
+            src: '/shopee-5.jpg',
+            region: 'BRA',
+            spending: '736.47USD',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          }
+        ]
+      },
+      {
+        client: 'Trip.com',
+        logo: '/logos/trip.png', 
+        stats: [
+          { label: '月日均消耗', value: '待补充' }
+        ],
+        materials: [
+          {
+            type: 'video',
+            src: '/trip-1.mp4',
+            region: 'HKG',
+            spending: '684.05USD',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'video',
+            src: '/trip-2.mp4',
+            region: 'HKG',
+            spending: '960.39USD',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'video',
+            src: '/trip-3.mp4',
+            region: 'HKG',
+            spending: '457.64USD',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          },
+          {
+            type: 'video',
+            src: '/trip-4.qt',
+            region: 'HKG',
+            spending: '待补充',
+            strategy: '待补充策略思考',
+            prompt: '待补充 AI 提示词',
+            tool: 'AI Tool',
+            metrics: '待补充'
+          }
+        ]
+      }
+    ]
+  },
+  { 
+    id: '03',
     title: 'AI Video', 
     client: 'Internal Project',
     role: 'Product Designer',
@@ -85,7 +271,7 @@ const projectsData = [
     ]
   },
   { 
-    id: '03',
+    id: '04',
     title: '3C 行研 Agent · Demo', 
     client: '独立研发 · Workflow 实验项目',
     role: '2024',
@@ -97,8 +283,8 @@ const projectsData = [
       { label: 'MVP', sub: '方案验证' },
       { label: 'Workflow', sub: '抽象建模' }
     ],
-    imageUrl: '/research-main.png', // 建议命名：research-main.png
-    externalLink: 'https://www.coze.cn/store/agent/7563572605627219977?bot_id=true', // 3C行研Agent链接
+    imageUrl: '/research-main.png', 
+    externalLink: 'https://www.coze.cn/store/agent/7563572605627219977?bot_id=true', 
     detailColor: 'bg-orange-600',
     detailImages: [
       '/research-1.png',
@@ -106,7 +292,7 @@ const projectsData = [
     ]
   },
   { 
-    id: '04',
+    id: '05',
     title: '基于 LLM 的小红书矩阵号自动化 Chatbot', 
     client: '独立研发 · Vibe Coding Side Project',
     role: '2024.3',
@@ -117,8 +303,8 @@ const projectsData = [
       { label: '文案矩阵', sub: '批量产出' },
       { label: '多维适配', sub: '人设/场景' }
     ],
-    imageUrl: '/chatbot-main.gif', // 自动识别为 gif
-    externalLink: 'https://www.coze.cn/store/agent/7495656188164980755?bot_id=true', // 小红书矩阵号链接
+    imageUrl: '/chatbot-main.gif', 
+    externalLink: 'https://www.coze.cn/store/agent/7495656188164980755?bot_id=true', 
     detailColor: 'bg-blue-600',
     detailImages: [
       '/chatbot-1.png',
@@ -165,93 +351,125 @@ const FlowerIcon = ({ className, delay = 0, color = "#ffb7d5" }) => (
 
 // --- Components ---
 
-const HomeProjects = () => {
+const ProjectItem = ({ project, index, isFullWidth = false }) => {
   const navigate = useNavigate();
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
   
-  // 只取前4个项目
-  const displayProjects = projectsData.slice(0, 4);
+  // 使用 MotionValue 代替 React State 来处理坐标，避免全量重绘
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // 使用 Spring 平滑跟随，但参数设为极高以保持灵敏度
+  const springConfig = { damping: 25, stiffness: 250, mass: 0.5 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    mouseX.set(e.clientX - rect.left - 48); // 48 是鼠标尺寸的一半
+    mouseY.set(e.clientY - rect.top - 48);
   };
 
   return (
-    <section className="bg-white border-t border-black/5">
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        {displayProjects.map((project, index) => (
-          <div 
-            key={project.id}
-            className={`group cursor-pointer border-black/5 relative ${
-              index % 2 === 0 ? 'md:border-r' : ''
-            } ${index < 2 ? 'border-b' : 'md:border-b-0 border-b'}`}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            onMouseMove={handleMouseMove}
-            onClick={() => {
-              if (project.externalLink) {
-                window.open(project.externalLink, '_blank');
-              } else {
-                navigate(`/work/${project.id}`);
-              }
-            }}
-          >
-            {/* Project Image Container */}
-            <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative cursor-none">
-              <SafeImage 
-                src={project.imageUrl} 
-                alt={project.title}
-                className="transition-transform duration-700 group-hover:scale-105"
-              />
-              
-              {/* Heart Cursor Overlay */}
-              <AnimatePresence>
-                {hoveredIndex === index && (
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0, x: mousePos.x - 48, y: mousePos.y - 48 }}
-                    animate={{ 
-                      scale: 1, 
-                      opacity: 1,
-                      x: mousePos.x - 48,
-                      y: mousePos.y - 48,
-                    }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ 
-                      type: 'spring', 
-                      damping: 25, 
-                      stiffness: 250, 
-                      mass: 0.5,
-                      opacity: { duration: 0.2 }
-                    }}
-                    className="absolute top-0 left-0 pointer-events-none z-20"
-                  >
-                    <HeartCursor className="w-24 h-24" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+    <div 
+      className={`group cursor-pointer border-black/5 relative overflow-hidden bg-white ${
+        isFullWidth ? 'w-full border-b' : `w-full md:w-1/2 ${index % 2 === 0 ? 'md:border-r' : ''} border-b`
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(null)}
+      onMouseMove={handleMouseMove}
+      onClick={() => {
+        if (project.externalLink) {
+          window.open(project.externalLink, '_blank');
+        } else {
+          navigate(`/work/${project.id}`);
+        }
+      }}
+    >
+      {/* Project Image Container */}
+      <div className={`${isFullWidth ? 'aspect-[21/9]' : 'aspect-[4/3]'} overflow-hidden bg-gray-100 relative cursor-none`}>
+        {project.isPlaceholder ? (
+          <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-50 flex flex-col items-center justify-center gap-6 group-hover:from-purple-200 group-hover:to-blue-100 transition-colors duration-700">
+            <div className="relative">
+              <PlayCircle className="w-24 h-24 text-purple-600 opacity-20 group-hover:opacity-40 transition-opacity duration-700" strokeWidth={1} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Zap className="w-8 h-8 text-purple-600 animate-pulse" fill="currentColor" />
+              </div>
             </div>
-            
-            {/* Project Info Footer */}
-            <div className="px-4 md:px-8 py-4 md:py-6 flex items-center justify-between bg-white">
-              <span 
-                className="text-[10px] font-black uppercase tracking-[0.2em] text-[#165dfc]"
-                style={{ fontFamily: '"Lucida Console", Monaco, monospace' }}
-              >
-                PROJECT {project.id}
-              </span>
-              <h3 
-                className="text-[12px] md:text-[12px] font-medium text-black tracking-tight text-right"
-                style={{ fontFamily: '"Trebuchet MS", Helvetica, sans-serif' }}
-              >
-                {project.title}
-              </h3>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-600/40">Visualizing Intelligence</span>
+              <div className="flex gap-1">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-purple-600/20" />
+                ))}
+              </div>
             </div>
           </div>
+        ) : (
+          <SmartMedia 
+            src={project.imageUrl} 
+            alt={project.title}
+            className="transition-transform duration-700 group-hover:scale-105"
+          />
+        )}
+        
+        {/* Heart Cursor Overlay - 直接订阅 MotionValue，不触发组件渲染 */}
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              style={{ 
+                x: cursorX, 
+                y: cursorY,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                pointerEvents: 'none',
+                zIndex: 20
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <HeartCursor className="w-24 h-24" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      
+      {/* Project Info Footer */}
+      <div className="px-4 md:px-8 py-4 md:py-6 flex items-center justify-between bg-white">
+        <span 
+          className="text-[10px] font-black uppercase tracking-[0.2em] text-[#165dfc]"
+          style={{ fontFamily: '"Lucida Console", Monaco, monospace' }}
+        >
+          PROJECT {project.id}
+        </span>
+        <h3 
+          className="text-[12px] md:text-[12px] font-medium text-black tracking-tight text-right"
+          style={{ fontFamily: '"Trebuchet MS", Helvetica, sans-serif' }}
+        >
+          {project.title}
+        </h3>
+      </div>
+    </div>
+  );
+};
+
+const HomeProjects = () => {
+  // Aura项目独占一行，其余4个项目组成2x2网格
+  const firstProject = projectsData[0];
+  const gridProjects = projectsData.slice(1, 5);
+
+  return (
+    <section className="bg-white border-t border-black/5">
+      {/* Top Full Width Project */}
+      {firstProject && <ProjectItem project={firstProject} isFullWidth={true} />}
+      
+      {/* Bottom 2x2 Grid */}
+      <div className="flex flex-wrap">
+        {gridProjects.map((project, index) => (
+          <ProjectItem key={project.id} project={project} index={index} />
         ))}
       </div>
     </section>
@@ -505,8 +723,30 @@ const SafeImage = ({ src, alt, className, containerClassName, style, ...props })
 const SafeVideo = ({ src, className, containerClassName, style, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const videoRef = useRef(null);
   const isAbsolute = containerClassName?.includes('absolute');
   const hasCustomBg = containerClassName?.includes('bg-');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && videoRef.current) {
+          videoRef.current.play().catch(() => {
+            // 忽略自动播放受限的错误
+          });
+        } else if (videoRef.current) {
+          videoRef.current.pause();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div 
@@ -521,9 +761,14 @@ const SafeVideo = ({ src, className, containerClassName, style, ...props }) => {
         </div>
       )}
       <video
+        ref={videoRef}
         onLoadedData={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         className={`w-full h-full object-cover block transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
+        muted
+        loop
+        playsInline
+        preload="metadata" // 只预加载元数据，不预加载整个视频文件
         {...props}
       >
         <source src={src} type="video/mp4" />
@@ -532,9 +777,21 @@ const SafeVideo = ({ src, className, containerClassName, style, ...props }) => {
   );
 };
 
+// 智能媒体组件：根据后缀自动选择 Image 或 Video
+const SmartMedia = ({ src, ...props }) => {
+  const isVideo = src?.toLowerCase().endsWith('.mp4') || 
+                  src?.toLowerCase().endsWith('.webm') || 
+                  src?.toLowerCase().endsWith('.mov') || 
+                  src?.toLowerCase().endsWith('.qt') || 
+                  src?.toLowerCase().endsWith('.ogg');
+  if (isVideo) {
+    return <SafeVideo src={src} {...props} />;
+  }
+  return <SafeImage src={src} {...props} />;
+};
+
 const HeartCursor = ({ className }) => {
-  // 定义爱心的像素矩阵 (13x10)
-  // 0: 透明, 1: 黑色边框, 2: 粉色填充, 3: 白色高光
+  // 定义爱心的像素矩阵 (13x11)
   const grid = [
     [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
     [0, 1, 2, 2, 2, 1, 0, 1, 2, 2, 2, 1, 0],
@@ -555,30 +812,31 @@ const HeartCursor = ({ className }) => {
     3: '#ffffff', // 白色高光
   };
 
-  const pixelSize = 6; // 每个像素的大小
+  const pixelSize = 6;
 
   return (
-    <div className={`relative ${className} scale-125 select-none pointer-events-none flex items-center justify-center`}>
-      <div 
-        style={{ 
-          display: 'grid', 
-          gridTemplateColumns: `repeat(13, ${pixelSize}px)`,
-          gridTemplateRows: `repeat(11, ${pixelSize}px)`,
-          width: 13 * pixelSize,
-          height: 11 * pixelSize
-        }}
+    <div className={`relative ${className} scale-125 select-none pointer-events-none flex items-center justify-center will-change-transform`}>
+      <svg 
+        width={13 * pixelSize} 
+        height={11 * pixelSize} 
+        viewBox={`0 0 ${13 * pixelSize} ${11 * pixelSize}`}
       >
-        {grid.flat().map((pixel, i) => (
-          <div 
-            key={i} 
-            style={{ 
-              backgroundColor: colors[pixel] || 'transparent',
-              width: pixelSize,
-              height: pixelSize
-            }} 
-          />
-        ))}
-      </div>
+        {grid.map((row, y) => 
+          row.map((pixel, x) => {
+            if (pixel === 0) return null;
+            return (
+              <rect
+                key={`${x}-${y}`}
+                x={x * pixelSize}
+                y={y * pixelSize}
+                width={pixelSize}
+                height={pixelSize}
+                fill={colors[pixel]}
+              />
+            );
+          })
+        )}
+      </svg>
       <div className="absolute inset-0 flex items-center justify-center pt-[2px]">
         <span className="text-black font-black text-[10px] uppercase tracking-tighter leading-none">View</span>
       </div>
@@ -586,7 +844,7 @@ const HeartCursor = ({ className }) => {
   );
 };
 
-const VideoModal = ({ bvid, isOpen, onClose }) => {
+const VideoModal = ({ material, isOpen, onClose }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   if (!isOpen) return null;
 
@@ -595,14 +853,14 @@ const VideoModal = ({ bvid, isOpen, onClose }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-12"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-8"
       onClick={() => {
         setIsLoaded(false);
         onClose();
       }}
     >
       <button 
-        className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors"
+        className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[110]"
         onClick={() => {
           setIsLoaded(false);
           onClose();
@@ -614,23 +872,43 @@ const VideoModal = ({ bvid, isOpen, onClose }) => {
       <motion.div 
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative"
+        className="w-full h-full flex items-center justify-center relative"
         onClick={e => e.stopPropagation()}
       >
-        {!isLoaded && bvid && <LoadingSkeleton />}
-        {bvid ? (
-          <iframe 
-            src={`//player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0`}
-            className={`w-full h-full transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-            frameBorder="no" 
-            scrolling="no" 
-            allowFullScreen={true}
-            onLoad={() => setIsLoaded(true)}
-          />
+        {material?.type === 'video' ? (
+          <div className="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative">
+            {!isLoaded && (material.bvid || material.src) && <LoadingSkeleton />}
+            {material.bvid ? (
+              <iframe 
+                src={`//player.bilibili.com/player.html?bvid=${material.bvid}&page=1&high_quality=1&danmaku=0`}
+                className={`w-full h-full transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                frameBorder="no" 
+                scrolling="no" 
+                allowFullScreen={true}
+                onLoad={() => setIsLoaded(true)}
+              />
+            ) : material.src ? (
+              <video 
+                src={material.src}
+                controls
+                autoPlay
+                className={`w-full h-full transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoadedData={() => setIsLoaded(true)}
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center text-white/20 gap-4">
+                <PlayCircle size={64} strokeWidth={1} />
+                <p className="font-black text-xs uppercase tracking-widest">Video link coming soon</p>
+              </div>
+            )}
+          </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-white/20 gap-4">
-            <PlayCircle size={64} strokeWidth={1} />
-            <p className="font-black text-xs uppercase tracking-widest">Video link coming soon</p>
+          <div className="w-full h-full flex items-center justify-center p-4">
+            <img 
+              src={material?.src} 
+              alt="" 
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            />
           </div>
         )}
       </motion.div>
@@ -679,6 +957,87 @@ const PageTransition = ({ children }) => (
     {children}
   </motion.div>
 );
+
+const AdMaterialCard = ({ material, onPreview }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="bg-white rounded-[2rem] border-2 border-black overflow-hidden shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:shadow-[12px_12px_0_0_rgba(0,0,0,1)] transition-all flex flex-col group">
+      {/* Media Section */}
+      <div 
+        className="relative aspect-video bg-gray-100 cursor-pointer overflow-hidden border-b-2 border-black"
+        onClick={() => onPreview(material)}
+      >
+        <SmartMedia 
+          src={material.src} 
+          alt="" 
+          className="group-hover:scale-105 transition-transform duration-700"
+        />
+        {material.type === 'video' && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-transform">
+              <Play fill="white" size={24} />
+            </div>
+          </div>
+        )}
+        {/* Performance Metric Badge */}
+        <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
+          {material.spending && (
+            <div className="bg-[#0047ff] text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 uppercase tracking-widest">
+              月日均消耗: {material.spending}
+            </div>
+          )}
+        </div>
+
+        {/* Region Badge */}
+        {material.region && (
+          <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white text-[9px] font-black px-2 py-1 rounded-md border border-white/10 shadow-lg uppercase tracking-tighter">
+            地区: {material.region}
+          </div>
+        )}
+      </div>
+
+      {/* Info Section */}
+      <div className="p-6 space-y-4 flex-grow flex flex-col">
+        {/* Strategy */}
+        <div className="space-y-2">
+          <h4 className="text-[10px] font-black text-[#0047ff] uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0047ff]" /> Strategy
+          </h4>
+          <p className="text-[13px] font-bold text-black/70 leading-relaxed">
+            {material.strategy}
+          </p>
+        </div>
+
+        {/* Prompt Section - Expandable */}
+        <div 
+          className="mt-auto pt-4 border-t border-black/5 cursor-pointer"
+          onMouseEnter={() => setIsExpanded(true)}
+          onMouseLeave={() => setIsExpanded(false)}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <div className="flex justify-between items-center mb-2">
+            <h4 className="text-[10px] font-black text-black/30 uppercase tracking-widest">
+              {material.tool} Prompt
+            </h4>
+            <div className="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+              {isExpanded ? 'CLOSE' : 'EXPAND'}
+            </div>
+          </div>
+          
+          <div className={`relative bg-gray-50 rounded-xl p-3 overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-40' : 'max-h-12'}`}>
+            <p className="text-[11px] font-mono text-black/50 leading-relaxed break-words">
+              {material.prompt}
+            </p>
+            {!isExpanded && (
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // --- Pages ---
 
@@ -890,11 +1249,30 @@ const AboutPage = () => {
   
   const experiences = [
     { 
+      studio: '钛动科技', 
+      tag: '出海营销第一梯队',
+      tagColor: 'bg-purple-100 text-purple-700',
+      role: 'AIGC 产品运营实习生', 
+      years: '2026.06 – 至今',
+      skills: ['素材制作', '数据复盘', '创意迭代', 'AI 工具链'],
+      description: '服务 10+ 个广告主包括 Lazada/Shopee/Trip/Rostics 等，进行投放素材制作、数据复盘与创意迭代，基于消耗等核心数据指标持续优化素材方向，为广告主提供创意优化建议。',
+      highlights: [
+        { label: '素材产出与迭代', content: '基于广告主投放目标，独立完成短视频/图片素材的创意策略、AI 辅助生成与后期制作，累计产出爆款素材 (日均消耗 >400USD) 30+ 条。' },
+        { label: '数据驱动优化', content: '每日跟踪在投素材数据 (消耗/CTR/CVR/ROI等)，对素材进行生命周期管理，归因分析并优化迭代，推动客户 Lazada 素材消耗提升 8%，单月爆款素材数量提升 3 倍。' },
+        { label: 'AI 生产', content: '基于洞察方向，运用 AI 工具完成从脚本到成片的全流程制作，并沉淀提示词与方法论，实现可复制、易上手。' }
+      ],
+      stats: [
+        { value: '30+', label: '爆款素材' },
+        { value: '+8%', label: '素材消耗提升' },
+        { value: '3倍', label: '爆款数量提升' }
+      ]
+    },
+    { 
       studio: '心动电波 · Crepal', 
       tag: 'AI 出海产品 · 垂类第一梯队',
       tagColor: 'bg-green-100 text-green-700',
       role: 'AI 产品经理实习生', 
-      years: '2025.11 – 至今',
+      years: '2025.11 – 2026.05',
       skills: ['Video Agent', 'Planning 问询', 'UGC 模板', 'Skill 封装'],
       description: '作为产品实习生，独立推动 AI Video Agent 的功能迭代、效果评估与视频模板调优，完成「提需 -> 验收」全流程。',
       highlights: [
@@ -1368,7 +1746,7 @@ const WorkPage = () => {
                       </div>
                     </div>
                   ) : (
-                    <SafeImage 
+                    <SmartMedia 
                       src={project.imageUrl} 
                       alt={project.title}
                       className="transition-transform duration-1000 group-hover:scale-105"
@@ -1415,7 +1793,7 @@ const ProjectDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const project = projectsData.find(p => p.id === id);
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   if (!project) return <div>Project not found</div>;
 
@@ -1423,31 +1801,18 @@ const ProjectDetailPage = () => {
     <PageTransition>
       <div className="min-h-screen bg-white text-black">
         <VideoModal 
-          isOpen={!!selectedVideo} 
-          bvid={selectedVideo?.bvid} 
-          onClose={() => setSelectedVideo(null)} 
+          isOpen={!!selectedMaterial} 
+          material={selectedMaterial} 
+          onClose={() => setSelectedMaterial(null)} 
         />
         
         {/* Top Banner Area - Support Video or GIF Background */}
         <div className={`h-[60vh] md:h-[70vh] ${project.detailColor} relative flex flex-col justify-end px-4 md:px-12 pb-16 overflow-hidden`}>
-          {/* GIF/Image Background Logic (Overrides solid color) */}
-          {project.bgImageUrl && (
-            <SafeImage 
-              src={project.bgImageUrl} 
+          {/* Media Background Logic (Overrides solid color) */}
+          {(project.bgImageUrl || project.videoUrl) && (
+            <SmartMedia 
+              src={project.bgImageUrl || project.videoUrl} 
               alt="" 
-              containerClassName={`absolute inset-0 z-0 ${project.detailColor}`}
-              style={{ opacity: 1 }} 
-            />
-          )}
-
-          {/* Video Background Logic (Overrides solid color) */}
-          {project.videoUrl && (
-            <SafeVideo 
-              src={project.videoUrl}
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
               containerClassName={`absolute inset-0 z-0 ${project.detailColor}`}
               style={{ opacity: 1 }} 
             />
@@ -1505,7 +1870,7 @@ const ProjectDetailPage = () => {
               {project.qrCodeUrl && (
                 <div className="shrink-0 bg-white p-4 rounded-3xl border-2 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex flex-col items-center gap-4">
                   <div className="w-32 h-32 md:w-40 md:h-40 relative">
-                    <SafeImage src={project.qrCodeUrl} alt="Experience App" className="w-full h-full" />
+                    <SmartMedia src={project.qrCodeUrl} alt="Experience App" className="w-full h-full" />
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">EXPERIENCE APP</span>
                 </div>
@@ -1554,7 +1919,7 @@ const ProjectDetailPage = () => {
                         <div className="w-10 h-1 bg-black/5 rounded-full" />
                       </div>
                       
-                      <SafeImage src={img} alt="" className="pt-5" />
+                      <SmartMedia src={img} alt="" className="pt-5" />
                       
                       {/* Special Preview Button on the last visible screen */}
                       {i === 4 && (
@@ -1577,6 +1942,84 @@ const ProjectDetailPage = () => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-black text-blue-600/5 select-none pointer-events-none uppercase tracking-tighter">
                 App
               </div>
+            </div>
+          ) : project.showcaseType === 'ad-portfolio' ? (
+            /* Ad Portfolio Showcase Grid */
+            <div className="space-y-24">
+              {project.campaigns.map((campaign, idx) => (
+                <div key={idx} className="space-y-12">
+                  {/* Campaign Header & Stats */}
+                  <div className="bg-[#f8f9fa] rounded-[3rem] p-8 md:p-12 border-2 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 border-b-2 border-black/10 pb-8 mb-8">
+                      <div className="flex items-center gap-6">
+                        {/* Logo Placeholder */}
+                        <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl border-2 border-black/5 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                          {campaign.logo ? (
+                            <SmartMedia src={campaign.logo} alt={campaign.client} className="w-full h-full object-contain p-2" />
+                          ) : (
+                            <span className="text-[10px] font-black text-black/20 uppercase tracking-tighter">LOGO</span>
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-3 mb-1">
+                            <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-black uppercase">{campaign.client}</h2>
+                          </div>
+                          <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Campaign Case</h4>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-4 md:gap-12">
+                        {campaign.stats.map((stat, i) => (
+                          <div key={i} className="flex flex-col">
+                            <span className="text-3xl md:text-4xl font-black text-blue-600 tracking-tighter">{stat.value}</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-black/30">{stat.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Materials Grid - Categorized */}
+                    <div className="space-y-12">
+                      {/* Banner Section */}
+                      {campaign.materials.some(m => m.type === 'banner') && (
+                        <div>
+                          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-black/30 mb-6 flex items-center gap-3">
+                            <div className="w-8 h-[2px] bg-blue-600/20" />
+                            Banner Materials
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {campaign.materials.filter(m => m.type === 'banner').map((material, i) => (
+                              <AdMaterialCard 
+                                key={`banner-${i}`} 
+                                material={material} 
+                                onPreview={(m) => setSelectedMaterial(m)}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Video Section */}
+                      {campaign.materials.some(m => m.type === 'video') && (
+                        <div>
+                          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-black/30 mb-6 flex items-center gap-3">
+                            <div className="w-8 h-[2px] bg-red-600/20" />
+                            Video Materials
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {campaign.materials.filter(m => m.type === 'video').map((material, i) => (
+                              <AdMaterialCard 
+                                key={`video-${i}`} 
+                                material={material} 
+                                onPreview={(m) => setSelectedMaterial(m)}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : project.showcaseType === 'video-grid' ? (
             /* Video Works Grid - Categorized Section */
@@ -1605,7 +2048,7 @@ const ProjectDetailPage = () => {
                         onClick={() => setSelectedVideo(video)}
                       >
                         <div className="aspect-video rounded-3xl overflow-hidden border-2 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] group-hover:shadow-[12px_12px_0_0_rgba(0,0,0,1)] transition-all group-hover:-translate-x-1 group-hover:-translate-y-1 bg-gray-100 relative">
-                          <SafeImage 
+                          <SmartMedia 
                             src={video.cover} 
                             alt={video.title} 
                             className="group-hover:scale-105 transition-transform duration-700" 
@@ -1637,7 +2080,7 @@ const ProjectDetailPage = () => {
                   viewport={{ once: true }}
                   className="w-full aspect-video md:aspect-[21/9] overflow-hidden bg-gray-100 rounded-lg md:rounded-2xl"
                 >
-                  <SafeImage src={img} alt="" />
+                  <SmartMedia src={img} alt="" />
                 </motion.div>
               ))}
             </div>
