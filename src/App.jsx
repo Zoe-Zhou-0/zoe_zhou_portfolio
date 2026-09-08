@@ -499,7 +499,10 @@ const LandingPage = ({ onEnter }) => {
     
     // Enter after animation
     setTimeout(() => {
-      navigate('/');
+      // 保持当前路径，不强制跳转到首页，除非就在首页
+      if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        navigate('/');
+      }
       onEnter();
     }, 800);
   };
@@ -697,14 +700,19 @@ const SmartMedia = ({ src, alt, className, containerClassName, style, ...props }
   const [autoPoster, setAutoPoster] = useState(null);
   const videoRef = useRef(null);
   
-  const isVideo = src?.toLowerCase().endsWith('.mp4') || 
-                  src?.toLowerCase().endsWith('.webm') || 
-                  src?.toLowerCase().endsWith('.mov') || 
-                  src?.toLowerCase().endsWith('.qt') || 
-                  src?.toLowerCase().endsWith('.ogg');
+  // 安全的视频检测逻辑
+  const isVideo = typeof src === 'string' && (
+    src.toLowerCase().endsWith('.mp4') || 
+    src.toLowerCase().endsWith('.webm') || 
+    src.toLowerCase().endsWith('.mov') || 
+    src.toLowerCase().endsWith('.qt') || 
+    src.toLowerCase().endsWith('.ogg')
+  );
 
-  // 底图逻辑：尝试寻找对应命名的 jpg
-  const posterSrc = src ? src.substring(0, src.lastIndexOf('.')) + '-poster.jpg' : null;
+  // 安全的底图路径逻辑
+  const posterSrc = (typeof src === 'string' && src.includes('.')) 
+    ? src.substring(0, src.lastIndexOf('.')) + '-poster.jpg' 
+    : null;
 
   // 视频首帧自动捕获逻辑 (Auto-Poster)
   useEffect(() => {
@@ -712,21 +720,27 @@ const SmartMedia = ({ src, alt, className, containerClassName, style, ...props }
       const video = document.createElement('video');
       video.src = src;
       video.crossOrigin = 'anonymous';
-      video.currentTime = 0.1; // 捕获 0.1 秒处的帧
+      video.currentTime = 0.1;
       video.muted = true;
       
       video.onloadeddata = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        try {
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-          setAutoPoster(dataUrl);
-        } catch (e) {
-          console.warn('Failed to capture frame:', e);
+        if (video.videoWidth > 0 && video.videoHeight > 0) {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext('2d');
+          try {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+            setAutoPoster(dataUrl);
+          } catch (e) {
+            console.warn('Failed to capture frame:', e);
+          }
         }
+      };
+      
+      video.onerror = () => {
+        console.warn('Auto-poster video load failed:', src);
       };
     }
   }, [src, isVideo]);
@@ -1254,110 +1268,110 @@ const HomePage = () => {
   );
 };
 
+const strengths = [
+  { title: '行业实践', content: '广告学专业出身，研究生期间长期实践于社交媒体营销领域，服务电商、旅游出行、食品餐饮、游戏等行业大客户。' },
+  { title: '商业洞察和策略', content: '具备通过客户沟通与需求挖掘，从 0 到 1 为品牌制定投放策略、策划爆款素材及营销事件的全链路经验。' },
+  { title: '数据分析', content: '擅长通过核心数据归因分析，提供精准的策略方案，有效推动素材消耗提升与爆款产出，提升客户满意度。' },
+  { title: 'AI 赋能', content: '长期深耕 AI x 广告营销领域，能将 AI 技术落地于真实商业场景，帮助团队及客户在内容素材、数据分析上实现降本增效。' },
+  { title: '目标导向', content: '具备高压下多任务并行的强执行力与跨部门沟通协调能力，过往经历中推动需求 100% 如期上线。' },
+];
+
+const experiences = [
+  { 
+    studio: '钛动科技', 
+    tag: '出海营销第一梯队',
+    tagColor: 'bg-purple-100 text-purple-700',
+    role: 'AIGC 产品运营实习生', 
+    years: '2026.06 – 至今',
+    skills: ['素材制作', '数据复盘', '创意迭代', 'AI 工具链'],
+    description: '服务 10+ 个广告主包括 Lazada/Shopee/Trip/Rostics 等，进行投放素材制作、数据复盘与创意迭代，基于消耗等核心数据指标持续优化素材方向，为广告主提供创意优化建议。',
+    highlights: [
+      { label: '素材产出与迭代', content: '基于广告主投放目标，独立完成短视频/图片素材的创意策略、AI 辅助生成与后期制作，累计产出爆款素材 (日均消耗 >400USD) 30+ 条。' },
+      { label: '数据驱动优化', content: '每日跟踪在投素材数据 (消耗/CTR/CVR/ROI等)，对素材进行生命周期管理，归因分析并优化迭代，推动客户 Lazada 素材消耗提升 8%，单月爆款素材数量提升 3 倍。' },
+      { label: 'AI 生产', content: '基于洞察方向，运用 AI 工具完成从脚本到成片的全流程制作，并沉淀提示词与方法论，实现可复制、易上手。' }
+    ],
+    stats: [
+      { value: '30+', label: '爆款素材' },
+      { value: '+8%', label: '素材消耗提升' },
+      { value: '3倍', label: '爆款数量提升' }
+    ]
+  },
+  { 
+    studio: '心动电波 · Crepal', 
+    tag: 'AI 出海产品 · 垂类第一梯队',
+    tagColor: 'bg-green-100 text-green-700',
+    role: 'AI 产品经理实习生', 
+    years: '2025.11 – 2026.05',
+    skills: ['Video Agent', 'Planning 问询', 'UGC 模板', 'Skill 封装'],
+    description: '作为产品实习生，独立推动 AI Video Agent 的功能迭代、效果评估与视频模板调优，完成「提需 -> 验收」全流程。',
+    highlights: [
+      { label: '功能上线', content: '从 0->1 推动 Agent 在 Planning 阶段的「智能问询机制」、模版模块的 UGC 内容制作功能建设等 5+ 产品需求；负责的需求 100% 如期上线。' },
+      { label: '模版搭建调优', content: '拆解爆款视频转化为模版，输出结构化 Prompt，并优化提升输出可用率，沉淀 20+ 条视频模版并封装为 Skill。' },
+      { label: '质量保障', content: '主导产品的日常评估与发版测试，梳理产品回归上线流程，设计回归测试用例并形成思维导图；同时收集各类共 50+ 用户真实需求输入与业务输入，覆盖 4+ 核心场景，构建测试基准用例库，支持版本迭代的标准化回归测试。' }
+    ],
+    stats: [
+      { value: '100%', label: '如期上线' },
+      { value: '20+', label: '视频模版' },
+      { value: '5+', label: '产品需求' }
+    ]
+  },
+  { 
+    studio: '蓝色光标', 
+    tag: '国内营销 TOP 1',
+    tagColor: 'bg-blue-100 text-blue-700',
+    role: 'AI 产品经理实习生', 
+    years: '2025.06 – 2025.09',
+    skills: ['AIGC 视频', '信息流广告', 'Prompt 调优', '质量保障'],
+    description: '以为主营业务提效为目标，从 0→1 参与信息流广告 AI 视频生成工具的产品设计、Prompt 调优与功能建设。',
+    highlights: [
+      { label: '效率提升', content: '针对信息流广告「需求量大、重复性高」的痛点，拆解关键提效点并迭代 Prompt，实现 视频可用率 +50%，单视频制作耗时从「小时级」降至「分钟级」，赋能 10+ 业务组，累计交付视频 1000+ 条。' },
+      { label: '落地验证', content: '与业务组共同探索行业研究自动化，通过抽象业务节点与配置 Workflow，在 Coze 平台搭建 3C 行研 Agent demo 版本，实现数据自动获取与报告生成，验证了技术方案的可行性。' }
+    ],
+    stats: [
+      { value: '+50%', label: '视频可用率' },
+      { value: '1000+', label: '视频交付' },
+      { value: '10+', label: '业务组' }
+    ]
+  },
+  { 
+    studio: '潮际汇智能科技', 
+    tag: 'AI 电商图第一梯队',
+    tagColor: 'bg-pink-100 text-pink-700',
+    role: 'AI 产品运营实习生', 
+    years: '2025.02 – 2025.05',
+    skills: ['需求分析', '跨部门沟通', '矩阵运营', '用户增长'],
+    description: '参与 AIGC 营销平台的需求分析与产品设计，跨部门沟通产品迭代，制定并落地多平台内容推广策略，驱动用户增长。',
+    highlights: [
+      { label: '产品推广', content: '基于用户痛点挖掘与竞品分析，制定全平台 5+ 官方号 与 10+ 矩阵号 的内容规划并执行，成功实现产品 UV 增长 5W+。' }
+    ],
+    stats: [
+      { value: '5W+', label: 'UV 增长' },
+      { value: '15+', label: '矩阵/官方号' },
+      { value: '全平台', label: '内容规划' }
+    ]
+  },
+  { 
+    studio: '中文在线集团', 
+    tag: '数字内容 TOP 3',
+    tagColor: 'bg-yellow-100 text-yellow-700',
+    role: 'AIGC 视频剪辑实习生', 
+    years: '2024.07 – 2024.09',
+    skills: ['AIGC 视频', '中国联通', '脚本 · 素材 · 剪辑'],
+    description: '针对中国联通视频彩铃平台，使用 AI 工具独立完成从脚本、素材生成到后期剪辑的全流程 AIGC 短视频制作。',
+    highlights: [
+      { label: '业务突破', content: '独立产出 AIGC 短视频 20+ 条 并成功投放，其中单条作品为组内唯一获 联通视频彩铃 APP 月度订阅量榜单 TOP 10。' }
+    ],
+    stats: [
+      { value: '20+', label: 'AIGC 短视频' },
+      { value: 'TOP 10', label: '月度订阅榜' }
+    ]
+  },
+];
+
 const AboutPage = () => {
   const navigate = useNavigate();
   const [expandedIndex, setExpandedIndex] = useState(-1);
   
-  const experiences = [
-    { 
-      studio: '钛动科技', 
-      tag: '出海营销第一梯队',
-      tagColor: 'bg-purple-100 text-purple-700',
-      role: 'AIGC 产品运营实习生', 
-      years: '2026.06 – 至今',
-      skills: ['素材制作', '数据复盘', '创意迭代', 'AI 工具链'],
-      description: '服务 10+ 个广告主包括 Lazada/Shopee/Trip/Rostics 等，进行投放素材制作、数据复盘与创意迭代，基于消耗等核心数据指标持续优化素材方向，为广告主提供创意优化建议。',
-      highlights: [
-        { label: '素材产出与迭代', content: '基于广告主投放目标，独立完成短视频/图片素材的创意策略、AI 辅助生成与后期制作，累计产出爆款素材 (日均消耗 >400USD) 30+ 条。' },
-        { label: '数据驱动优化', content: '每日跟踪在投素材数据 (消耗/CTR/CVR/ROI等)，对素材进行生命周期管理，归因分析并优化迭代，推动客户 Lazada 素材消耗提升 8%，单月爆款素材数量提升 3 倍。' },
-        { label: 'AI 生产', content: '基于洞察方向，运用 AI 工具完成从脚本到成片的全流程制作，并沉淀提示词与方法论，实现可复制、易上手。' }
-      ],
-      stats: [
-        { value: '30+', label: '爆款素材' },
-        { value: '+8%', label: '素材消耗提升' },
-        { value: '3倍', label: '爆款数量提升' }
-      ]
-    },
-    { 
-      studio: '心动电波 · Crepal', 
-      tag: 'AI 出海产品 · 垂类第一梯队',
-      tagColor: 'bg-green-100 text-green-700',
-      role: 'AI 产品经理实习生', 
-      years: '2025.11 – 2026.05',
-      skills: ['Video Agent', 'Planning 问询', 'UGC 模板', 'Skill 封装'],
-      description: '作为产品实习生，独立推动 AI Video Agent 的功能迭代、效果评估与视频模板调优，完成「提需 -> 验收」全流程。',
-      highlights: [
-        { label: '功能上线', content: '从 0->1 推动 Agent 在 Planning 阶段的「智能问询机制」、模版模块的 UGC 内容制作功能建设等 5+ 产品需求；负责的需求 100% 如期上线。' },
-        { label: '模版搭建调优', content: '拆解爆款视频转化为模版，输出结构化 Prompt，并优化提升输出可用率，沉淀 20+ 条视频模版并封装为 Skill。' },
-        { label: '质量保障', content: '主导产品的日常评估与发版测试，梳理产品回归上线流程，设计回归测试用例并形成思维导图；同时收集各类共 50+ 用户真实需求输入与业务输入，覆盖 4+ 核心场景，构建测试基准用例库，支持版本迭代的标准化回归测试。' }
-      ],
-      stats: [
-        { value: '100%', label: '如期上线' },
-        { value: '20+', label: '视频模版' },
-        { value: '5+', label: '产品需求' }
-      ]
-    },
-    { 
-      studio: '蓝色光标', 
-      tag: '国内营销 TOP 1',
-      tagColor: 'bg-blue-100 text-blue-700',
-      role: 'AI 产品经理实习生', 
-      years: '2025.06 – 2025.09',
-      skills: ['AIGC 视频', '信息流广告', 'Prompt 调优', '质量保障'],
-      description: '以为主营业务提效为目标，从 0→1 参与信息流广告 AI 视频生成工具的产品设计、Prompt 调优与功能建设。',
-      highlights: [
-        { label: '效率提升', content: '针对信息流广告「需求量大、重复性高」的痛点，拆解关键提效点并迭代 Prompt，实现 视频可用率 +50%，单视频制作耗时从「小时级」降至「分钟级」，赋能 10+ 业务组，累计交付视频 1000+ 条。' },
-        { label: '落地验证', content: '与业务组共同探索行业研究自动化，通过抽象业务节点与配置 Workflow，在 Coze 平台搭建 3C 行研 Agent demo 版本，实现数据自动获取与报告生成，验证了技术方案的可行性。' }
-      ],
-      stats: [
-        { value: '+50%', label: '视频可用率' },
-        { value: '1000+', label: '视频交付' },
-        { value: '10+', label: '业务组' }
-      ]
-    },
-    { 
-      studio: '潮际汇智能科技', 
-      tag: 'AI 电商图第一梯队',
-      tagColor: 'bg-pink-100 text-pink-700',
-      role: 'AI 产品运营实习生', 
-      years: '2025.02 – 2025.05',
-      skills: ['需求分析', '跨部门沟通', '矩阵运营', '用户增长'],
-      description: '参与 AIGC 营销平台的需求分析与产品设计，跨部门沟通产品迭代，制定并落地多平台内容推广策略，驱动用户增长。',
-      highlights: [
-        { label: '产品推广', content: '基于用户痛点挖掘与竞品分析，制定全平台 5+ 官方号 与 10+ 矩阵号 的内容规划并执行，成功实现产品 UV 增长 5W+。' }
-      ],
-      stats: [
-        { value: '5W+', label: 'UV 增长' },
-        { value: '15+', label: '矩阵/官方号' },
-        { value: '全平台', label: '内容规划' }
-      ]
-    },
-    { 
-      studio: '中文在线集团', 
-      tag: '数字内容 TOP 3',
-      tagColor: 'bg-yellow-100 text-yellow-700',
-      role: 'AIGC 视频剪辑实习生', 
-      years: '2024.07 – 2024.09',
-      skills: ['AIGC 视频', '中国联通', '脚本 · 素材 · 剪辑'],
-      description: '针对中国联通视频彩铃平台，使用 AI 工具独立完成从脚本、素材生成到后期剪辑的全流程 AIGC 短视频制作。',
-      highlights: [
-        { label: '业务突破', content: '独立产出 AIGC 短视频 20+ 条 并成功投放，其中单条作品为组内唯一获 联通视频彩铃 APP 月度订阅量榜单 TOP 10。' }
-      ],
-      stats: [
-        { value: '20+', label: 'AIGC 短视频' },
-        { value: 'TOP 10', label: '月度订阅榜' }
-      ]
-    },
-  ];
-
-  const strengths = [
-    { title: '行业实践', content: '广告学专业出身，研究生期间长期实践于社交媒体营销领域，服务电商、旅游出行、食品餐饮、游戏等行业大客户。' },
-    { title: '商业洞察和策略', content: '具备通过客户沟通与需求挖掘，从 0 到 1 为品牌制定投放策略、策划爆款素材及营销事件的全链路经验。' },
-    { title: '数据分析', content: '擅长通过核心数据归因分析，提供精准的策略方案，有效推动素材消耗提升与爆款产出，提升客户满意度。' },
-    { title: 'AI 赋能', content: '长期深耕 AI x 广告营销领域，能将 AI 技术落地于真实商业场景，帮助团队及客户在内容素材、数据分析上实现降本增效。' },
-    { title: '目标导向', content: '具备高压下多任务并行的强执行力与跨部门沟通协调能力，过往经历中推动需求 100% 如期上线。' },
-  ];
-
   return (
     <PageTransition>
       <div className="min-h-screen bg-white selection:bg-[#0047ff] selection:text-white">
@@ -1365,7 +1379,7 @@ const AboutPage = () => {
         <div className="h-[60vh] flex flex-col justify-end px-4 md:px-12 pb-2 relative bg-white overflow-hidden">
           <div className="absolute bottom-2 right-4 md:right-12 w-40 h-56 md:w-64 md:h-84 overflow-hidden z-10 bg-gray-100 flex items-center justify-center border border-black/5">
              <SmartMedia 
-               src="/about-me.png" // 改为读取 public/about-me.png
+               src="/about-me.png"
                alt="Zoe Zhou" 
                className="object-top"
              />
@@ -1389,7 +1403,7 @@ const AboutPage = () => {
               </div>
             </ScrollReveal>
 
-            {/* Strengths Section - Moved to top, Updated with new content */}
+            {/* Strengths Section */}
             <ScrollReveal>
               <div className="w-full">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#0047ff]/40 mb-6">个人优势 / Strengths</h3>
@@ -1407,7 +1421,7 @@ const AboutPage = () => {
               </div>
             </ScrollReveal>
 
-            {/* Experience Section - Now after Strengths */}
+            {/* Experience Section */}
             <ScrollReveal>
               <div className="w-full">
                 <div className="flex flex-col md:flex-row md:items-baseline gap-4 mb-8 md:mb-12">
@@ -1468,7 +1482,7 @@ const AboutPage = () => {
                               <div className="max-w-4xl space-y-12">
                                 {/* Skills Tags */}
                                 <div className="flex flex-wrap gap-2">
-                                  {exp.skills.map((skill, si) => (
+                                  {exp.skills?.map((skill, si) => (
                                     <span key={si} className="text-[11px] font-bold px-4 py-1.5 bg-yellow-50 text-[#4a3728] border border-yellow-200/50 rounded-full">
                                       {skill}
                                     </span>
@@ -1485,7 +1499,7 @@ const AboutPage = () => {
 
                                 {/* Highlights */}
                                 <div className="space-y-8">
-                                  {exp.highlights.map((item, hi) => (
+                                  {exp.highlights?.map((item, hi) => (
                                     <div key={hi} className="relative pl-6">
                                       <Sparkles className="absolute left-0 top-1 text-blue-500" size={16} />
                                       <div className="space-y-2">
@@ -1498,8 +1512,8 @@ const AboutPage = () => {
 
                                 {/* Stats Cards */}
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                  {exp.stats.map((stat, sti) => (
-                                    <div key={stat.label} className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 flex flex-col gap-1">
+                                  {exp.stats?.map((stat, sti) => (
+                                    <div key={sti} className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 flex flex-col gap-1">
                                       <div className="text-3xl font-black text-[#0047ff] tracking-tighter">{stat.value}</div>
                                       <div className="text-[10px] font-bold text-[#4a3728]/40 uppercase tracking-widest">{stat.label}</div>
                                     </div>
@@ -2055,7 +2069,7 @@ const ProjectDetailPage = () => {
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1 }}
                         className="group relative cursor-pointer"
-                        onClick={() => setSelectedVideo(video)}
+                        onClick={() => setSelectedMaterial(video)}
                       >
                         <div className="aspect-video rounded-3xl overflow-hidden border-2 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] group-hover:shadow-[12px_12px_0_0_rgba(0,0,0,1)] transition-all group-hover:-translate-x-1 group-hover:-translate-y-1 bg-gray-100 relative">
                           <SmartMedia 
@@ -2210,51 +2224,59 @@ const ScrollToTop = () => {
 
 // --- Main App ---
 
+const AppContent = ({ showLanding, setShowLanding }) => {
+  const location = useLocation();
+
+  return (
+    <div className="font-sans text-black bg-white selection:bg-yellow-400 selection:text-black">
+      <ScrollToTop />
+      
+      <AnimatePresence mode="wait">
+        {showLanding ? (
+          <LandingPage key="landing" onEnter={() => setShowLanding(false)} />
+        ) : (
+          <motion.div
+            key="main-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Navbar />
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/work" element={<WorkPage />} />
+                <Route path="/work/:id" element={<ProjectDetailPage />} />
+              </Routes>
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .outline-text {
+          -webkit-text-stroke: 2px #f3f4f6;
+          text-stroke: 2px #f3f4f6;
+          color: transparent;
+        }
+        @media (max-width: 768px) {
+          .outline-text {
+            -webkit-text-stroke: 1px #f3f4f6;
+            text-stroke: 1px #f3f4f6;
+          }
+        }
+      `}} />
+    </div>
+  );
+};
+
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
 
   return (
     <Router>
-      <div className="font-sans text-black bg-white selection:bg-yellow-400 selection:text-black">
-        <ScrollToTop />
-        
-        <AnimatePresence mode="wait">
-          {showLanding ? (
-            <LandingPage key="landing" onEnter={() => setShowLanding(false)} />
-          ) : (
-            <motion.div
-              key="main-content"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Navbar />
-              <AnimatePresence mode="wait">
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/work" element={<WorkPage />} />
-                  <Route path="/work/:id" element={<ProjectDetailPage />} />
-                </Routes>
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <style dangerouslySetInnerHTML={{ __html: `
-          .outline-text {
-            -webkit-text-stroke: 2px #f3f4f6;
-            text-stroke: 2px #f3f4f6;
-            color: transparent;
-          }
-          @media (max-width: 768px) {
-            .outline-text {
-              -webkit-text-stroke: 1px #f3f4f6;
-              text-stroke: 1px #f3f4f6;
-            }
-          }
-        `}} />
-      </div>
+      <AppContent showLanding={showLanding} setShowLanding={setShowLanding} />
     </Router>
   );
 }
