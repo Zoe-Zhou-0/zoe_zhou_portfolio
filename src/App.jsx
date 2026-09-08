@@ -690,104 +690,115 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-const SafeImage = ({ src, alt, className, containerClassName, style, ...props }) => {
+// 智能媒体组件：支持视频首帧自动捕获、底图回退以及平滑切换
+const SmartMedia = ({ src, alt, className, containerClassName, style, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const isAbsolute = containerClassName?.includes('absolute');
-  const hasCustomBg = containerClassName?.includes('bg-');
-
-  return (
-    <div 
-      className={`${!isAbsolute ? 'relative' : ''} w-full h-full overflow-hidden ${!hasCustomBg ? 'bg-gray-100' : ''} ${containerClassName || ''}`} 
-      style={style}
-    >
-      {!isLoaded && !hasError && <LoadingSkeleton />}
-      {hasError && (
-        <div className="absolute inset-0 bg-gray-50 flex flex-col items-center justify-center text-gray-300 gap-2">
-          <Zap size={20} />
-          <span className="text-[9px] font-black uppercase tracking-widest">Media Error</span>
-        </div>
-      )}
-      <img
-        src={src}
-        alt={alt}
-        className={`w-full h-full object-cover block transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
-        onLoad={() => setIsLoaded(true)}
-        onError={() => setHasError(true)}
-        {...props}
-      />
-    </div>
-  );
-};
-
-const SafeVideo = ({ src, className, containerClassName, style, ...props }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [autoPoster, setAutoPoster] = useState(null);
   const videoRef = useRef(null);
-  const isAbsolute = containerClassName?.includes('absolute');
-  const hasCustomBg = containerClassName?.includes('bg-');
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && videoRef.current) {
-          videoRef.current.play().catch(() => {
-            // 忽略自动播放受限的错误
-          });
-        } else if (videoRef.current) {
-          videoRef.current.pause();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div 
-      className={`${!isAbsolute ? 'relative' : ''} w-full h-full overflow-hidden ${!hasCustomBg ? 'bg-gray-100' : ''} ${containerClassName || ''}`} 
-      style={style}
-    >
-      {!isLoaded && !hasError && <LoadingSkeleton />}
-      {hasError && (
-        <div className="absolute inset-0 bg-gray-50 flex flex-col items-center justify-center text-gray-300 gap-2">
-          <Zap size={20} />
-          <span className="text-[9px] font-black uppercase tracking-widest">Media Error</span>
-        </div>
-      )}
-      <video
-        ref={videoRef}
-        onLoadedData={() => setIsLoaded(true)}
-        onError={() => setHasError(true)}
-        className={`w-full h-full object-cover block transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
-        muted
-        loop
-        playsInline
-        preload="metadata" // 只预加载元数据，不预加载整个视频文件
-        {...props}
-      >
-        <source src={src} type="video/mp4" />
-      </video>
-    </div>
-  );
-};
-
-// 智能媒体组件：根据后缀自动选择 Image 或 Video
-const SmartMedia = ({ src, ...props }) => {
+  
   const isVideo = src?.toLowerCase().endsWith('.mp4') || 
                   src?.toLowerCase().endsWith('.webm') || 
                   src?.toLowerCase().endsWith('.mov') || 
                   src?.toLowerCase().endsWith('.qt') || 
                   src?.toLowerCase().endsWith('.ogg');
-  if (isVideo) {
-    return <SafeVideo src={src} {...props} />;
-  }
-  return <SafeImage src={src} {...props} />;
+
+  // 底图逻辑：尝试寻找对应命名的 jpg
+  const posterSrc = src ? src.substring(0, src.lastIndexOf('.')) + '-poster.jpg' : null;
+
+  // 视频首帧自动捕获逻辑 (Auto-Poster)
+  useEffect(() => {
+    if (isVideo && src) {
+      const video = document.createElement('video');
+      video.src = src;
+      video.crossOrigin = 'anonymous';
+      video.currentTime = 0.1; // 捕获 0.1 秒处的帧
+      video.muted = true;
+      
+      video.onloadeddata = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        try {
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          setAutoPoster(dataUrl);
+        } catch (e) {
+          console.warn('Failed to capture frame:', e);
+        }
+      };
+    }
+  }, [src, isVideo]);
+
+  useEffect(() => {
+    if (isVideo && videoRef.current) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(videoRef.current);
+      return () => observer.disconnect();
+    }
+  }, [isVideo, src]);
+
+  return (
+    <div 
+      className={`relative w-full h-full overflow-hidden bg-gray-50 ${containerClassName || ''}`} 
+      style={style}
+    >
+      {/* 1. 骨架屏 - 仅在完全没有画面时显示 */}
+      {!isLoaded && !autoPoster && !hasError && <LoadingSkeleton />}
+
+      {/* 2. 背景占位：手动准备的底图 或 自动捕获的首帧 */}
+      {(posterSrc || autoPoster) && !isLoaded && (
+        <img
+          src={posterSrc || autoPoster}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          onError={(e) => {
+            if (autoPoster) e.target.src = autoPoster;
+            else e.target.style.display = 'none';
+          }}
+        />
+      )}
+
+      {/* 3. 顶层：实际媒体内容 (GIF/Video) */}
+      {hasError ? (
+        <div className="absolute inset-0 bg-gray-50 flex flex-col items-center justify-center text-gray-300 gap-2 z-20">
+          <Zap size={20} />
+          <span className="text-[9px] font-black uppercase tracking-widest">Media Error</span>
+        </div>
+      ) : isVideo ? (
+        <video
+          ref={videoRef}
+          onLoadedData={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
+          className={`relative z-10 w-full h-full object-cover block transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
+          muted
+          loop
+          playsInline
+          src={src}
+          {...props}
+        />
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
+          className={`relative z-10 w-full h-full object-cover block transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
+          {...props}
+        />
+      )}
+    </div>
+  );
 };
 
 const HeartCursor = ({ className }) => {
