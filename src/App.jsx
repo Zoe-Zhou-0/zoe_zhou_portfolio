@@ -1007,7 +1007,7 @@ const AdMaterialCard = ({ material, onPreview }) => {
           </div>
         )}
         {/* Performance Metric Badge */}
-        <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
+        <div className="absolute top-4 right-4 flex flex-col items-end gap-2 z-30">
           {material.spending && (
             <div className="bg-[#0047ff] text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border border-white/20 uppercase tracking-widest">
               月日均消耗: {material.spending}
@@ -1017,7 +1017,7 @@ const AdMaterialCard = ({ material, onPreview }) => {
 
         {/* Region Badge */}
         {material.region && (
-          <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white text-[9px] font-black px-2 py-1 rounded-md border border-white/10 shadow-lg uppercase tracking-tighter">
+          <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white text-[9px] font-black px-2 py-1 rounded-md border border-white/10 shadow-lg uppercase tracking-tighter z-30">
             地区: {material.region}
           </div>
         )}
@@ -1992,14 +1992,7 @@ const ProjectDetailPage = () => {
                           <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Campaign Case</h4>
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-4 md:gap-12">
-                        {campaign.stats.map((stat, i) => (
-                          <div key={i} className="flex flex-col">
-                            <span className="text-3xl md:text-4xl font-black text-blue-600 tracking-tighter">{stat.value}</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-black/30">{stat.label}</span>
-                          </div>
-                        ))}
-                      </div>
+                      {/* 移除了右上角的统计数据块 */}
                     </div>
 
                     {/* Materials Grid - Categorized */}
