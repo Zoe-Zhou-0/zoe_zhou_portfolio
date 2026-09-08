@@ -1351,12 +1351,11 @@ const AboutPage = () => {
   ];
 
   const strengths = [
-    { title: 'AI 实践', content: '具有垂类行业 TOP1 企业的 AI 产品经理实习经历，包括 AI Video Agent、4A 广告、数字内容版权等。' },
-    { title: '产品能力', content: '具有使用 Cursor 独立完成“需求构思 - Demo 验证”闭环的落地实操能力，输出 PRD 和可交互 html 设计图、优化 prompt 改善 Agent 输出效果等能力，所在团队产品曾获 ProductHunt 日榜 TOP2，能够使用 Vibe coding 从 0-1 搭建小程序。' },
-    { title: '目标导向', content: '主动出击，跨界寻找机遇，锻炼了发现问题→识别问题→定义问题→解决问题的产品思维，储备 AI 产品领域的实践经验。' },
-    { title: '用户思维', content: '具有良好的与上下游合作的客户视角，拥有情绪与事实课题分离的协作意识，实现项目目标共赢的思维。' },
-    { title: '创新思维', content: '具有研究用户的思维习惯，利用业余时间研发 Vibe coding 产品，从 0 到 1 搭建了 Aura 小程序、小红书矩阵 & 视频模板 Skill。' },
-    { title: '创造思维', content: '关注心理学领域，沉浸式爱好象棋、漫画、滑雪、手工陶艺等，让自己能够进入专注的心流状态，提升个人创造力。' },
+    { title: '行业实践', content: '广告学专业出身，研究生期间长期实践于社交媒体营销领域，服务电商、旅游出行、食品餐饮、游戏等行业大客户。' },
+    { title: '商业洞察和策略', content: '具备通过客户沟通与需求挖掘，从 0 到 1 为品牌制定投放策略、策划爆款素材及营销事件的全链路经验。' },
+    { title: '数据分析', content: '擅长通过核心数据归因分析，提供精准的策略方案，有效推动素材消耗提升与爆款产出，提升客户满意度。' },
+    { title: 'AI 赋能', content: '长期深耕 AI x 广告营销领域，能将 AI 技术落地于真实商业场景，帮助团队及客户在内容素材、数据分析上实现降本增效。' },
+    { title: '目标导向', content: '具备高压下多任务并行的强执行力与跨部门沟通协调能力，过往经历中推动需求 100% 如期上线。' },
   ];
 
   return (
@@ -1365,7 +1364,7 @@ const AboutPage = () => {
         {/* About Hero */}
         <div className="h-[60vh] flex flex-col justify-end px-4 md:px-12 pb-2 relative bg-white overflow-hidden">
           <div className="absolute bottom-2 right-4 md:right-12 w-40 h-56 md:w-64 md:h-84 overflow-hidden z-10 bg-gray-100 flex items-center justify-center border border-black/5">
-             <SafeImage 
+             <SmartMedia 
                src="/about-me.png" // 改为读取 public/about-me.png
                alt="Zoe Zhou" 
                className="object-top"
@@ -1385,7 +1384,7 @@ const AboutPage = () => {
               <div className="max-w-3xl">
                 <p className="text-lg md:text-xl font-bold leading-relaxed text-[#4a3728]">
                   嗨，我是 周怡沁 / Zoe。<br />
-                  一个正在 AI 产品世界里发芽的产品经理。
+                  一个懂 AI 技术、会数据分析、更能深度链接大客户的复合型增长官。
                 </p>
               </div>
             </ScrollReveal>
