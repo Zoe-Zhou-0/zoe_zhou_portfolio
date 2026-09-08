@@ -900,7 +900,8 @@ const VideoModal = ({ material, isOpen, onClose }) => {
         className="w-full h-full flex items-center justify-center relative"
         onClick={e => e.stopPropagation()}
       >
-        {material?.type === 'video' ? (
+        {/* 自动检测是否为视频类型：明确标记为 video、包含 bvid 或后缀为视频格式 */}
+        {(material?.type === 'video' || material?.bvid || (typeof material?.src === 'string' && material.src.toLowerCase().match(/\.(mp4|webm|mov|qt|ogg)$/))) ? (
           <div className="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative">
             {!isLoaded && (material.bvid || material.src) && <LoadingSkeleton />}
             {material.bvid ? (
@@ -930,7 +931,7 @@ const VideoModal = ({ material, isOpen, onClose }) => {
         ) : (
           <div className="w-full h-full flex items-center justify-center p-4">
             <img 
-              src={material?.src} 
+              src={material?.src || material?.cover} 
               alt="" 
               className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
             />
